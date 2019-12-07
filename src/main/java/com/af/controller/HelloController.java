@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -44,6 +43,6 @@ public class HelloController {
         log.info("info");
         log.error("error");
         log.debug("debug");
-        return areaMapper.selectTest();
+        return areaMapper.selectAll();
     }
 }

@@ -2,6 +2,9 @@ package com.af.model.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 
@@ -11,29 +14,45 @@ import java.util.List;
  * @Date 2019/12/7 20:35
  */
 @Data
+@Table(name = "tb_product")
 public class Product {
-    private Long productId;
-    //商品描述
+    @Id
+    @Column(name = "product_id")
+    private Integer productId;
+
+    @Column(name = "product_name")
     private String productName;
-    //描述
+
+    @Column(name = "product_desc")
     private String productDesc;
     //缩略图
+    @Column(name = "img_addr")
     private String imgAddr;
     //原价
+    @Column(name = "normal_price")
     private String normalPrice;
     //折扣价
+    @Column(name = "promotion_price")
     private String promotionPrice;
     //权重
     private Integer priority;
+
+    @Column(name = "create_time")
     private Date createTime;
+
+    @Column(name = "last_edit_time")
     private Date lastEditTime;
-    //-1：不可用  0-下架   1-在前端展示系统展示
+    //状态
+    @Column(name = "enable_status")
     private Integer enableStatus;
-    //商品详情图片列表
-    private List<ProductImg> productImgList;
-    //商品类别
-    private ProductCategory productCategory;
-    //店铺
-    private Shop shop;
+
+    private Integer point;
+    //类别id
+    @Column(name = "product_category_id")
+    private Integer productCategoryId;
+    //店铺id
+    @Column(name = "shop_id")
+    private Integer shopId;
+    //详情图 有多个
 
 }

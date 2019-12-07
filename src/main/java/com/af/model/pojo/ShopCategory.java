@@ -2,6 +2,9 @@ package com.af.model.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -10,18 +13,30 @@ import java.util.Date;
  * @Date 2019/12/7 20:17
  */
 @Data
+@Table(name = "tb_shop_category")
 public class ShopCategory {
-    private Long shopCategoryId;
-    //店铺类别名
+    @Id
+    @Column(name = "shop_category_id")
+    private Integer shopCategoryId;
+
+    @Column(name = "shop_category_name")
     private String shopCategoryName;
-    //描述
+
+    @Column(name = "shop_category_desc")
     private String shopCategoryDesc;
-    //图片
-    private String showCategoryImg;
-    //权重
+
+    @Column(name = "shop_category_img")
+    private String shopCategoryImg;
+
     private Integer priority;
+
+    @Column(name = "create_time")
     private Date createTime;
+
+    @Column(name = "last_edit_time")
     private Date lastEditTime;
-    //上级店铺
-    private ShopCategory parent;
+    //上级店铺类别
+    @Column(name = "parent_id")
+    private Integer parentId;
+
 }

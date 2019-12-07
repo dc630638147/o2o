@@ -2,6 +2,9 @@ package com.af.model.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -10,10 +13,18 @@ import java.util.Date;
  * @Date 2019/12/7 20:05
  */
 @Data
+@Table(name = "tb_wechat_auth")
 public class WechatAuth {
-    private Long wechatAuthId;
+    @Id
+    @Column(name = "wechat_auth_id")
+    private Integer wechatAuthId;
+    //personInfo用户id
+    @Column(name = "user_id")
+    private Integer userId;
+
+    @Column(name = "open_id")
     private String openId;
-    private Date creteTime;
-    //用户信息
-    private PersonInfo personInfo;
+
+    @Column(name = "create_time")
+    private Date createTime;
 }

@@ -2,6 +2,9 @@ package com.af.model.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -10,20 +13,34 @@ import java.util.Date;
  * @Date 2019/12/7 19:19
  */
 @Data
+@Table(name = "tb_person_info")
 public class PersonInfo {
-    private Long userId;
+    @Id
+    @Column(name = "user_id")
+    private Integer userId;
+
     private String name;
     //头像地址
+    @Column(name = "profile_img")
     private String profileImg;
-    private String email;
-    //性别
+
     private String gender;
-    //用户状态
-    private Integer enableStatus;
+
+    private String phone;
+
+    private String email;
+
     //类别 1-顾客  2-店家 3-超级管理员
+    @Column(name = "user_type")
     private Integer userType;
+    @Column(name = "create_time")
     private Date createTime;
+
+    @Column(name = "last_edit_time")
     private Date lastEditTime;
+
+    @Column(name = "enable_status")
+    private Integer enableStatus;
 
 
 

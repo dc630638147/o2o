@@ -2,6 +2,9 @@ package com.af.model.pojo;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -10,13 +13,26 @@ import java.util.Date;
  * @Date 2019/12/7 20:29
  */
 @Data
+@Table(name = "tb_product_category")
 public class ProductCategory {
-    private Long productCategoryId;
-    //店铺id，是哪个店铺商品类别
-    private Long shopId;
-    //名称
+    @Id
+    @Column(name = "product_category_id")
+    private Integer productCategoryId;
+
+    @Column(name = "product_category_name")
     private String productCategoryName;
-    //权重
+
+    @Column(name = "product_category_desc")
+    private String productCategoryDesc;
+
     private Integer priority;
-    private Date creaTime;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "last_edit_time")
+    private Date lastEditTime;
+    //店铺id，是哪个店铺商品类别
+    @Column(name = "shop_id")
+    private Integer shopId;
 }

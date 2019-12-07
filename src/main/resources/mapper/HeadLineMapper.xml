@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.af.mapper.HeadLineMapper" >
+  <resultMap id="BaseResultMap" type="com.af.model.pojo.HeadLine" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="line_id" property="lineId" jdbcType="INTEGER" />
+    <result column="line_name" property="lineName" jdbcType="VARCHAR" />
+    <result column="line_link" property="lineLink" jdbcType="VARCHAR" />
+    <result column="line_img" property="lineImg" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="enable_status" property="enableStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="last_edit_time" property="lastEditTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
