@@ -8,6 +8,7 @@ import com.af.model.pojo.Shop;
 import com.af.utils.ImageUtil;
 import com.af.utils.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -20,6 +21,7 @@ import java.util.Date;
  * @Description
  * @Date 2019/12/8 15:23
  */
+@Service
 public class ShopServiceImpl implements ShopService {
 
     @Autowired
@@ -37,7 +39,6 @@ public class ShopServiceImpl implements ShopService {
         if(shop == null){
             return new ShopExecution(ShopStateEnum.NULL_SHOPID);
         }
-
         //上传信息
         try{
             shop.setEnableStatus(0);

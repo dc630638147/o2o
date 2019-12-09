@@ -33,8 +33,8 @@ public class HelloController {
 
     @RequestMapping("/index")
     public String index(Model model) {
-        model.addAttribute("val", ":haaaaahah");
-        return "hello";
+        //model.addAttribute("val", ":haaaaahah");
+        return "index";
     }
 
     @RequestMapping("/test")
@@ -45,4 +45,5 @@ public class HelloController {
         log.debug("debug");
         return areaMapper.selectAll();
     }
+
 }
