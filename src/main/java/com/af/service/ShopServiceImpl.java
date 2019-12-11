@@ -6,8 +6,11 @@ import com.af.mapper.ShopMapper;
 import com.af.model.dto.ShopExecution;
 import com.af.model.pojo.Shop;
 import com.af.utils.ImageUtil;
+import com.af.utils.JSONResult;
 import com.af.utils.PathUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,59 +24,43 @@ import java.util.Date;
  * @Description
  * @Date 2019/12/8 15:23
  */
+@Slf4j
 @Service
 public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private ShopMapper shopMapper;
-
+    @Value("rootFilePath")
+    private String rootFilePath;//总路径
+    @Value("shopThumbnail")
+    private String shopThumbnail;//店铺缩略图路径
     /**
      * 增加店铺
      * @param shop
-     * @param shopImg
+     * @param shopImgFile
      * @return
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public ShopExecution addShop(Shop shop, CommonsMultipartFile shopImg) {
-        if(shop == null){
-            return new ShopExecution(ShopStateEnum.NULL_SHOPID);
-        }
+    public JSONResult addShop(Shop shop, CommonsMultipartFile shopImgFile) {
         //上传信息
         try{
+            //上传图片
+            String path = ImageUtil.generateThumbnail(shopImgFile,rootFilePath,shopThumbnail );
+            shop.setShopImg(path);
             shop.setEnableStatus(0);
             shop.setCreateTime(new Date());
             shop.setLastEditTime(new Date());
             //插入
             int res = shopMapper.insertSelective(shop);
             if(res < 1){
+                log.info("店铺创建失败,插入res{}",res);
                 throw new RuntimeException("店铺创建失败");
-            }else{
-                //图片存储
-                if(shopImg == null){
-                    //插入缩略图以及设置图片路径
-                    addShopImg(shop,shopImg);
-                    Example example = new Example(Shop.class);
-                    Example.Criteria criteria = example.createCriteria();
-                    criteria.andEqualTo("shopId",shop.getShopId());
-                    res = shopMapper.updateByExampleSelective(shop,example);
-                    if(res < 1){
-                        throw new ShopOperationExcetion("更新店铺图片地址失败");
-                    }
-                }
             }
         }catch (Exception e){
-            throw new ShopOperationExcetion("addShop error:"+e.getMessage());
-        } 
-        return new ShopExecution(ShopStateEnum.CHECK);
+            log.info("店铺创建异常:{}",e.getMessage());
+            throw new ShopOperationExcetion("店铺创建异常");
+        }
+        return JSONResult.ok();
     }
-
-    private void addShopImg(Shop shop, CommonsMultipartFile shopImg) {
-        String dest = PathUtil.getImageBasePath();//中间路径
-        //写入缩略图以及返回存储路径
-        String path = ImageUtil.generateThumbnail(shopImg, dest);
-        shop.setShopImg(path);
-    }
-
-
 }

@@ -1,10 +1,9 @@
 package com.af.service;
 
-import com.af.model.dto.ShopExecution;
 import com.af.model.pojo.Shop;
+import com.af.utils.JSONResult;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
 
 /**
  * @Author AF
@@ -12,5 +11,5 @@ import java.io.File;
  * @Date 2019/12/8 15:22
  */
 public interface ShopService {
-    public ShopExecution addShop(Shop shop,CommonsMultipartFile image);
+    public JSONResult addShop(Shop shop, CommonsMultipartFile image);
 }

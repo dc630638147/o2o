@@ -44,8 +44,6 @@
             <h1 class="title">表单</h1>
         </header>
         <div class="content">
-            <form id="form_shopRegister">
-
                 <div class="list-block">
                     <ul>
                         <!-- Text inputs -->
@@ -118,6 +116,19 @@
                                 </div>
                             </div>
                         </li>
+                        <!--验证码-->
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">验证码</div>
+                                    <div class="item-input">
+                                        <img id="kaptcha" alt="点击更换" title="点击更换"
+                                             src="/shopApi/kaptcha"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
                         <!--店铺简介 textarea-->
                         <li class="align-top">
                             <div class="item-content">
@@ -135,12 +146,9 @@
                 <div class="content-block">
                     <div class="row">
                         <div class="col-50"><a href="#" class="button button-big button-fill button-danger">返回</a></div>
-                        <div class="col-50"><a href="#" id="submit " class="button button-big button-fill button-success">提交</a></div>
+                        <div class="col-50"><a href="#" id="submit" class="button button-big button-fill button-success">提交</a></div>
                     </div>
                 </div>
-
-            </form>
-
         </div>
     </div>
 

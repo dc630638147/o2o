@@ -18,21 +18,20 @@ public class ImageUtil {
     private static String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 
     //创建缩略图
-    public static String generateThumbnail(CommonsMultipartFile thumbnail, String targetAddr) {
+    public static String generateThumbnail(CommonsMultipartFile thumbnail,String rootFilePath, String shopThumbnail) {
         //随机生成文件名
         String realFileName = FileUtil.getRandomFileName();
         //获取文件后缀名
         String extension = getFileExtension(thumbnail);
         //创建文件地址
-        makeDirPath(targetAddr);
-        String relativeAddr = targetAddr + realFileName + extension;
-        File dest = new File(PathUtil.getImageBasePath() + relativeAddr);
+        makeDirPath(rootFilePath+File.separator+shopThumbnail);
+        String relativeAddr = rootFilePath+File.separator+shopThumbnail+File.separator+ realFileName + extension;
         try {
-            Thumbnails.of(thumbnail.getInputStream()).size(200, 200).outputQuality(0.25f).toFile(dest);
+            Thumbnails.of(thumbnail.getInputStream()).size(200, 200).outputQuality(0.25f).toFile(relativeAddr);
         } catch (IOException e) {
             throw new RuntimeException("创建缩略图失败：" + e.toString());
         }
-        return relativeAddr;
+        return File.separator+shopThumbnail+File.separator+ realFileName + extension;
     }
 
     public static String generateNormalImg(CommonsMultipartFile thumbnail, String targetAddr) {

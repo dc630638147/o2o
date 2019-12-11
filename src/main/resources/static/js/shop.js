@@ -2,6 +2,12 @@
 $(function () {
     var getAllShopCategory = '/app/shopCategory/getAll';
     var getAllArea = '/app/area/getAllArea';
+    var codeUrl ='/shopApi/kaptcha';
+    //更换验证码
+
+    $('#kaptcha').click(function () {
+        $('#kaptcha').attr('src',codeUrl+'?'+Math.floor(Math.random()*100));
+    });
 
     function getShopInitInfo() {
         //商铺
@@ -34,8 +40,7 @@ $(function () {
 
     //form表单提交
     $('#submit ').click(function () {
-        // $("form[name='form66']").submit();
-        $('#form_shopRegister').submit();
-    });
+c    });
+    
 
 })
