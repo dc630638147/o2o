@@ -1,13 +1,10 @@
 package com.af.service;
 
-import com.af.enums.ShopStateEnum;
 import com.af.exception.ShopOperationExcetion;
 import com.af.mapper.ShopMapper;
-import com.af.model.dto.ShopExecution;
 import com.af.model.pojo.Shop;
 import com.af.utils.ImageUtil;
 import com.af.utils.JSONResult;
-import com.af.utils.PathUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 
@@ -30,35 +26,39 @@ public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private ShopMapper shopMapper;
-    @Value("rootFilePath")
+    @Value("${rootFilePath}")
     private String rootFilePath;//总路径
-    @Value("shopThumbnail")
+    @Value("${shopThumbnail}")
     private String shopThumbnail;//店铺缩略图路径
+
     /**
      * 增加店铺
+     *
      * @param shop
-     * @param shopImgFile
+     * @param
      * @return
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public JSONResult addShop(Shop shop, CommonsMultipartFile shopImgFile) {
+
         //上传信息
-        try{
+        try {
             //上传图片
-            String path = ImageUtil.generateThumbnail(shopImgFile,rootFilePath,shopThumbnail );
+            String path = ImageUtil.generateThumbnail(shopImgFile, rootFilePath, shopThumbnail);
             shop.setShopImg(path);
             shop.setEnableStatus(0);
             shop.setCreateTime(new Date());
             shop.setLastEditTime(new Date());
             //插入
             int res = shopMapper.insertSelective(shop);
-            if(res < 1){
-                log.info("店铺创建失败,插入res{}",res);
+          //  int i = 10/0;
+            if (res < 1) {
+                log.info("店铺创建失败,插入res{}", res);
                 throw new RuntimeException("店铺创建失败");
             }
-        }catch (Exception e){
-            log.info("店铺创建异常:{}",e.getMessage());
+        } catch (Exception e) {
+            log.info("店铺创建异常:{}", e.getMessage());
             throw new ShopOperationExcetion("店铺创建异常");
         }
         return JSONResult.ok();

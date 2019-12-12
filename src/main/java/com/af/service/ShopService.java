@@ -11,5 +11,5 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  * @Date 2019/12/8 15:22
  */
 public interface ShopService {
-    public JSONResult addShop(Shop shop, CommonsMultipartFile image);
+    public JSONResult addShop(Shop shop, CommonsMultipartFile shopImgFile);
 }

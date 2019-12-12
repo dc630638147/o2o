@@ -1,19 +1,17 @@
 package com.af.web.app;
 
-import com.af.enums.ShopStateEnum;
-import com.af.model.dto.ShopExecution;
+import com.af.model.dto.ShopVo;
 import com.af.model.pojo.Shop;
 import com.af.service.ShopService;
 import com.af.utils.JSONResult;
 import com.af.web.BaseController;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.imageio.ImageIO;
@@ -72,7 +70,7 @@ import java.io.IOException;
     }
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<Object,Object> redisTemplate;
     @RequestMapping("/redis")
     public void redis(){
         redisTemplate.opsForValue().set("sssss","ssssss");
@@ -80,23 +78,40 @@ import java.io.IOException;
     }
 
 
+
+    @RequestMapping("/registerImg")
+    public JSONResult registerShopImg(@RequestParam(value = "file",required=false) CommonsMultipartFile file){
+
+        return new JSONResult();
+    }
+
+
     /**
      * 注册店铺
      */
     @RequestMapping("/register")
-    public JSONResult registerShop(@RequestBody Shop shop, CommonsMultipartFile file){
-        if(file == null){
-            return JSONResult.errorMsg("请上传图片");
-        }
+    public JSONResult registerShop(Shop shop,@RequestParam("code")String code,@RequestParam(value = "file") CommonsMultipartFile file){
         if(shop == null){
             return JSONResult.errorMsg("请填写店铺信息");
         }
+        if(file == null){
+            return JSONResult.errorMsg("请上传图片");
+        }
+        if(StringUtils.isBlank(code)){
+            return JSONResult.errorMsg("请填写验证码");
+        }
+        //校验code
+        Object o = redisTemplate.opsForValue().get(CODE_KEY+":"+1);
+        if(o == null && !StringUtils.equals(code,o.toString())){
+            return JSONResult.errorMsg("验证码不正确");
+        }
+
         //给店铺设置创建者
         //TODO
         shop.setOwnerId(1);
 
         try{
-            JSONResult jsonResult  = shopService.addShop(shop, file);
+            JSONResult jsonResult  = shopService.addShop(shop,file);
             return jsonResult;
         }catch (Exception e){
             log.info("店铺添加异常:{}",e.getMessage());
