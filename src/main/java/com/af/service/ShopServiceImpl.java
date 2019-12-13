@@ -2,14 +2,20 @@ package com.af.service;
 
 import com.af.exception.ShopOperationExcetion;
 import com.af.mapper.ShopMapper;
+import com.af.model.dto.ShopVo;
 import com.af.model.pojo.Area;
+import com.af.model.pojo.PersonInfo;
 import com.af.model.pojo.Shop;
 import com.af.model.pojo.ShopCategory;
+import com.af.service.impl.PersonInfoServiceImpl;
 import com.af.utils.ImageUtil;
 import com.af.utils.JSONResult;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,9 +25,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author AF
@@ -42,6 +46,8 @@ public class ShopServiceImpl implements ShopService {
     private AreaService areaService;
     @Autowired
     private ShopCategoryService shopCategoryService;
+    @Autowired
+    private PersonService personService;
 
     /**
      * 增加店铺
@@ -121,5 +127,39 @@ public class ShopServiceImpl implements ShopService {
             throw new ShopOperationExcetion("店铺更新异常");
         }
         return JSONResult.ok();
+    }
+
+    /**
+     * 分页查找 ownerId不能为空
+     * @param shopVo
+     * @return
+     */
+    @Override
+    public PageInfo<Shop> getShopPage(ShopVo shopVo) {
+
+        Example shopExample = new Example(Shop.class);
+        Example.Criteria criteria = shopExample.createCriteria();
+        //店铺名模糊查询
+        if(StringUtils.isNotBlank(shopVo.getShopName())){
+            criteria.andLike("shopName","%"+shopVo.getShopName()+"%");
+        }
+        //商铺分类
+        if(shopVo.getShopCategoryId() != null){
+            criteria.andEqualTo("shopCategoryId",shopVo.getShopCategoryId());
+        }
+        //所属区域
+        if(shopVo.getAreaId() != null){
+            criteria.andEqualTo("areaId",shopVo.getAreaId());
+        }
+        //店铺状态
+        if(shopVo.getEnableStatus() != null){
+            criteria.andEqualTo("enableStatus",shopVo.getEnableStatus());
+        }
+        //商家id
+        criteria.andEqualTo("ownerId",shopVo.getOwnerId());
+        PageHelper.startPage(shopVo.getPageNum(),shopVo.getPageSize());
+        List<Shop> shops = shopMapper.selectByExample(shopExample);
+        PageInfo<Shop> pageInfo = new PageInfo<>(shops);
+        return pageInfo;
     }
 }

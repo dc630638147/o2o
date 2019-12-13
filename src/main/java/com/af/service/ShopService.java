@@ -1,7 +1,9 @@
 package com.af.service;
 
+import com.af.model.dto.ShopVo;
 import com.af.model.pojo.Shop;
 import com.af.utils.JSONResult;
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 
@@ -16,4 +18,6 @@ public interface ShopService {
     public JSONResult allShopInfo(Integer shopId);
 
     public JSONResult updateShop(Shop shop,CommonsMultipartFile file);
+
+    public PageInfo<Shop> getShopPage(ShopVo shopVo);
 }

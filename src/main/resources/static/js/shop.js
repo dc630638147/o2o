@@ -1,6 +1,5 @@
 
 $(function () {
-   // aleer('aa');
     var getAllShopCategory = '/app/shopCategory/getAll';
     var getAllArea = '/app/area/getAllArea';
     var codeUrl ='/shopApi/kaptcha';

@@ -1,15 +1,20 @@
 package com.af.web.app;
 
+import com.af.model.dto.ShopVo;
+import com.af.model.pojo.PersonInfo;
 import com.af.model.pojo.Shop;
+import com.af.service.PersonService;
 import com.af.service.ShopService;
 import com.af.utils.JSONResult;
 import com.af.web.BaseController;
+import com.github.pagehelper.PageInfo;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,6 +41,8 @@ public class ShopController extends BaseController {
     private DefaultKaptcha kaptcha;
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private PersonService personService;
 
     @GetMapping("/kaptcha")
     public void kaptcha(HttpServletResponse servletResponse) {
@@ -94,7 +101,7 @@ public class ShopController extends BaseController {
      */
     @RequestMapping("/register")
     @ResponseBody
-    public JSONResult registerShop(Shop shop, @RequestParam("code") String code, @RequestParam(value = "file",required = false) CommonsMultipartFile file) {
+    public JSONResult registerShop(Shop shop, @RequestParam("code") String code, @RequestParam(value = "file", required = false) CommonsMultipartFile file) {
         if (shop == null) {
             return JSONResult.errorMsg("请填写店铺信息");
         }
@@ -140,7 +147,7 @@ public class ShopController extends BaseController {
      * @param shopId
      * @return
      */
-    @RequestMapping("/shopEdit")
+    @RequestMapping("/shopEditPage")
     public ModelAndView shopEdit(@RequestParam("shopId") Integer shopId) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/shop/edit");
@@ -148,6 +155,25 @@ public class ShopController extends BaseController {
         return mv;
     }
 
+    /**
+     * 进入店铺增加页面
+     *
+     * @return
+     */
+    @RequestMapping("/addShopPage")
+    public ModelAndView addShop(@RequestParam("ownerId") Integer ownerId, Model model) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/shop/index");
+        mv.addObject("ownerId", ownerId);
+        return mv;
+    }
+
+    /**
+     * 根据商铺id查询
+     *
+     * @param shopId
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/allShopInfo/{shopId}")
     public JSONResult allShopInfo(@PathVariable Integer shopId) {
@@ -156,5 +182,33 @@ public class ShopController extends BaseController {
         }
         //根据shopId查询shop信息
         return shopService.allShopInfo(shopId);
+    }
+
+    @RequestMapping("/shopListPage")
+    public ModelAndView shopList(@RequestParam("ownerId") Integer ownerId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/shop/list");
+        //设置ownerId
+        mv.addObject("ownerId", ownerId);
+        //查询店铺信息
+        PersonInfo pi = personService.getById(ownerId);
+        mv.addObject("pi", pi);
+        return mv;
+    }
+
+    @RequestMapping("/getShopList")
+    @ResponseBody
+    public JSONResult getShopList(@RequestBody ShopVo shopVo) {
+        if (shopVo == null || shopVo.getOwnerId() == null) {
+            return JSONResult.errorMsg("用户不能为空");
+        }
+        if (shopVo.getPageNum() == null || shopVo.getPageNum() < 1) {
+            shopVo.setPageNum(1);
+        }
+        if (shopVo.getPageSize() == null || shopVo.getPageSize() < 1) {
+            shopVo.setPageSize(15);
+        }
+        PageInfo<Shop> shopPage = shopService.getShopPage(shopVo);
+        return new JSONResult(shopPage);
     }
 }

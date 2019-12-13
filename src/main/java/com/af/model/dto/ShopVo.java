@@ -11,5 +11,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 @Data
 public class ShopVo extends Shop  {
-   //private CommonsMultipartFile file;
+   private Integer pageNum;//第几页
+   private Integer pageSize;//每页的条数
 }
