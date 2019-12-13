@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Configuration
 @Slf4j
-public class JedisConfig {
+public class RedisConfig {
 //lettuce客户端连接工厂
     @Resource
     private LettuceConnectionFactory lettuceConnectionFactory;
@@ -65,6 +65,10 @@ public class JedisConfig {
         redisTemplate.setHashKeySerializer(keySerializer());
         redisTemplate.setValueSerializer(valueSerializer());
         redisTemplate.setHashValueSerializer(valueSerializer());
+/*
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+        redisTemplate.setConnectionFactory(redisConnectionFactory);*/
         log.debug("自定义RedisTemplate加载完成");
         return redisTemplate;
     }

@@ -12,4 +12,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 public interface ShopService {
     public JSONResult addShop(Shop shop, CommonsMultipartFile shopImgFile);
+
+    public JSONResult allShopInfo(Integer shopId);
+
+    public JSONResult updateShop(Shop shop,CommonsMultipartFile file);
 }
