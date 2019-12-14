@@ -1,7 +1,9 @@
 package com.af.service.impl;
 
 import com.af.mapper.ProductCategoryMapper;
+import com.af.mapper.ProductMapper;
 import com.af.model.dto.ProductCategoryVo;
+import com.af.model.pojo.Product;
 import com.af.model.pojo.ProductCategory;
 import com.af.service.ProductCategoryService;
 import com.af.utils.JSONResult;
@@ -27,6 +29,8 @@ import java.util.List;
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Autowired
     private ProductCategoryMapper productCategoryMapper;
+    @Autowired
+    private ProductMapper productMapper;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -46,6 +50,15 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Transactional(propagation = Propagation.REQUIRED)
     public JSONResult delete(Integer productCategoryId) {
         try {
+            //TODO 要先校验下面是否还有商品
+            Example productEx = new Example(Product.class);
+            productEx.createCriteria().andEqualTo("productCategortId",productCategoryId).
+                    andEqualTo("enableStatus",0);
+            List<Product> products = productMapper.selectByExample(productEx);
+            if(CollectionUtils.isNotEmpty(products)){
+                return JSONResult.errorMsg("还存在此分类商品，不能删除");
+            }
+
             ProductCategory pc = new ProductCategory();
             pc.setProductCategoryId(productCategoryId);
             int delete = productCategoryMapper.delete(pc);
