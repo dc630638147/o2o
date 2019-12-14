@@ -1,5 +1,6 @@
 package com.af.service;
 
+import com.af.model.dto.ProductVo;
 import com.af.model.pojo.Product;
 import com.af.utils.JSONResult;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -12,4 +13,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 public interface ProductService {
     public JSONResult addproduct(Product product, CommonsMultipartFile productImg,
                                  CommonsMultipartFile productDescImg);
+
+    public JSONResult getProductList(ProductVo vo);
+
+    public JSONResult delete(Integer productId);
 }

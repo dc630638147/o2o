@@ -2,6 +2,7 @@ package com.af.service.impl;
 
 import com.af.mapper.ProductImgMapper;
 import com.af.mapper.ProductMapper;
+import com.af.model.dto.ProductVo;
 import com.af.model.pojo.Product;
 import com.af.model.pojo.ProductImg;
 import com.af.service.ProductService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 
@@ -66,6 +68,36 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             log.info("商品添加异常:{}", e.getMessage());
             return JSONResult.errorMsg("商品添加异常");
+        }
+        return JSONResult.ok();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public JSONResult getProductList(ProductVo vo) {
+        Example productExample = new Example(Product.class);
+        Example.Criteria criteria = productExample.createCriteria();
+        if(vo !=null){
+            if(vo.getShopId() != null){
+                criteria.andEqualTo("shopId",vo.getShopId());
+            }
+            if(vo.getEnableStatus()!=null){
+                criteria.andEqualTo("enableStatus",vo.getEnableStatus());
+            }
+        }
+        return JSONResult.ok(productMapper.selectByExample(productExample));
+    }
+
+    @Override
+    public JSONResult delete(Integer productId) {
+        Example example = new Example(Product.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("productId",productId);
+        Product p = new Product();
+        p.setEnableStatus(-1);//下架
+        int i = productMapper.updateByExampleSelective(p,example);
+        if(i < 0){
+            return JSONResult.errorMsg("删除失败");
         }
         return JSONResult.ok();
     }

@@ -10,3 +10,7 @@ function shopEdit(shopId) {
 function shopCategory(shopId) {
     window.location.href = "/shopApi/shopCategoryPage?shopId=" + shopId;
 }
+//跳转到商品管理
+function  productManage(shopId) {
+    window.location.href = "/productApp/productPage?shopId=" + shopId;
+}
