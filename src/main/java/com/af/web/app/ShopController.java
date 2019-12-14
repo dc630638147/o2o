@@ -211,4 +211,19 @@ public class ShopController extends BaseController {
         PageInfo<Shop> shopPage = shopService.getShopPage(shopVo);
         return new JSONResult(shopPage);
     }
+
+    @RequestMapping("/shopManagePage")
+    public ModelAndView shopManagePage(@RequestParam("shopId") Integer shopId){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/shop/shopmanage");
+        mv.addObject("shopId",shopId);
+        return mv;
+    }
+    @RequestMapping("/shopCategoryPage")
+    public ModelAndView shopCategoryPage(@RequestParam("shopId") Integer shopId){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/shop/shopcategory");
+        mv.addObject("shopId",shopId);
+        return mv;
+    }
 }

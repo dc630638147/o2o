@@ -2,6 +2,7 @@ package com.af.service;
 
 import com.af.exception.ShopOperationExcetion;
 import com.af.mapper.ShopMapper;
+import com.af.model.dto.ShopCategoryVo;
 import com.af.model.dto.ShopVo;
 import com.af.model.pojo.Area;
 import com.af.model.pojo.PersonInfo;
@@ -91,7 +92,7 @@ public class ShopServiceImpl implements ShopService {
         }
         //
         List<Area> allArea = areaService.getAllArea();
-        List<ShopCategory> allCategory = shopCategoryService.getAllCategory();
+        List<ShopCategory> allCategory = shopCategoryService.getAllCategory(null);
         JSONObject ob = new JSONObject();
         ob.put("shop",shops.get(0));
         ob.put("areaList",allArea);

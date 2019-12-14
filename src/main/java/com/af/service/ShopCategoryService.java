@@ -1,5 +1,6 @@
 package com.af.service;
 
+import com.af.model.dto.ShopCategoryVo;
 import com.af.model.pojo.ShopCategory;
 
 import java.util.List;
@@ -11,5 +12,6 @@ import java.util.List;
  */
 public interface ShopCategoryService {
 
-    public List<ShopCategory> getAllCategory();
+    public List<ShopCategory> getAllCategory(ShopCategoryVo vo);
+
 }

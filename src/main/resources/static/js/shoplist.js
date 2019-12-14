@@ -22,12 +22,21 @@ $(function () {
                     }else if(obj.enableStatus == 1){
                         statusRes = '审核通过';
                     }
+                    var html = '';
+                    if(obj.enableStatus == 1){
+                         html ='<div class="row row-shop">'+
+                            '<div class="col-40">'+obj.shopName+'</div>'+
+                            '<div class="col-40">'+statusRes+'</div>'+
+                            '<div class="col-20">'+'<a href="javascript:void(0);" onclick="edit('+obj.shopId+')">操作</a>'+'</div>'+
+                            '</div>';
+                    }else{
+                        html ='<div class="row row-shop">'+
+                            '<div class="col-40">'+obj.shopName+'</div>'+
+                            '<div class="col-40">'+statusRes+'</div>'+
+                            '</div>';
+                    }
 
-                    var html ='<div class="row row-shop">'+
-                        '<div class="col-40">'+obj.shopName+'</div>'+
-                        '<div class="col-40">'+statusRes+'</div>'+
-                        '<div class="col-20">'+'<a href="javascript:void(0);" onclick="edit('+obj.shopId+')">操作</a>'+'</div>'+
-                        '</div>';
+
                     contentHtml = contentHtml+html;
                 });
                 $('#shopWrap').html(contentHtml);
@@ -42,5 +51,5 @@ function toAddShop(ownerId) {
 }
 
 function edit(shopId) {
-    window.location.href = "/shopApi/shopEditPage?shopId=" + shopId;
+    window.location.href = "/shopApi/shopManagePage?shopId=" + shopId;
 }
