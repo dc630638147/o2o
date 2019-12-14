@@ -36,49 +36,17 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequestMapping("/shopApi")
 public class ShopController extends BaseController {
-
-    @Autowired
-    private DefaultKaptcha kaptcha;
     @Autowired
     private ShopService shopService;
     @Autowired
     private PersonService personService;
 
+    public final String SHOP_CODE_KEY = "SHOP_KAPTCHA_CODE";
+
     @GetMapping("/kaptcha")
-    public void kaptcha(HttpServletResponse servletResponse) {
-        byte[] kaptchaBytes = null;
-        ByteArrayOutputStream byteArrOUT = new ByteArrayOutputStream();
-        String kaptchaText = kaptcha.createText();
-        //TODO 暂时模拟店家ID
-        Integer ownerId = 1;
-        redisTemplate.opsForValue().set(CODE_KEY + ":" + ownerId, kaptchaText, 60, TimeUnit.SECONDS);
-        BufferedImage bufferedImage = kaptcha.createImage(kaptchaText);
-        try {
-            ImageIO.write(bufferedImage, "jpg", byteArrOUT);
-        } catch (IOException e) {
-            log.info("输出验证码图片发生异常");
-            return;
-        }
-
-        //定义输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
-        kaptchaBytes = byteArrOUT.toByteArray();
-        servletResponse.setHeader("Cache-Control", "no-store");
-        servletResponse.setHeader("Pragma", "no-cache");
-        servletResponse.setDateHeader("Expires", 0);
-        servletResponse.setContentType("image/jpeg");
-        try {
-            ServletOutputStream servletOutputStream = servletResponse.getOutputStream();
-            servletOutputStream.write(kaptchaBytes);
-            servletOutputStream.flush();
-            servletOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void kaptcha(HttpServletResponse response) {
+        getCode(SHOP_CODE_KEY,response);
     }
-
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     @RequestMapping("/redis")
     public void redis() {
@@ -109,11 +77,10 @@ public class ShopController extends BaseController {
         if (StringUtils.isBlank(code)) {
             return JSONResult.errorMsg("请填写验证码");
         }
-        Object o = redisTemplate.opsForValue().get(CODE_KEY + ":" + 1);
+        Object o = redisTemplate.opsForValue().get(SHOP_CODE_KEY + ":" + 1);
         if (o == null || !StringUtils.equals(code, o.toString())) {
             return JSONResult.errorMsg("验证码不正确");
         }
-
         if (shop.getShopId() == null) {
             //创建
             if (file == null) {
