@@ -29,6 +29,9 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
            if(vo.getShopCategoryId() != null){
                criteria.andEqualTo("shopCategoryId",vo.getShopCategoryId());
            }
+           if(vo.getParentId() != null){
+               criteria.andEqualTo("parentId",vo.getParentId());
+           }
        }
         return shopCategoryMapper.selectByExample(shopCategoryExample);
 

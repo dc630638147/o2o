@@ -31,11 +31,13 @@ public class HelloController {
         return view;
     }
 
+/*
     @RequestMapping("/index")
     public String index(Model model) {
         //model.addAttribute("val", ":haaaaahah");
         return "index";
     }
+*/
 
     @RequestMapping("/test")
     @ResponseBody

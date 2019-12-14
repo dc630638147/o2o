@@ -40,4 +40,12 @@ public class ShopCategoryAppController {
         return JSONResult.ok(allCategory);
     }
 
+    @RequestMapping("/getParentCategory")
+    public JSONResult getParentCategory(){
+        ShopCategoryVo vo = new ShopCategoryVo();
+        vo.setParentId(0);
+        List<ShopCategory> allCategory = shopCategoryService.getAllCategory(vo);
+        return JSONResult.ok(allCategory);
+    }
+
 }
