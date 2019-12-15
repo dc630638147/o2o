@@ -26,7 +26,7 @@ $(function () {
             var data = res.data;
             var contHtml = '';
             $.each(data, function (index, obj) {
-                var html = '<div class="col-50 shop-classify" data-category=' + obj.shopCategoryId + '>'
+                var html = '<div class="col-50 shop-classify" onclick="enterShopList('+obj.shopCategoryId+')" data-category=' + obj.shopCategoryId + '>'
                     + '<div class="word">'
                     + '<p class="shop-title">' + obj.shopCategoryName + '</p>'
                     + '<p class="shop-desc">' + obj.shopCategoryDesc + '</p>'
@@ -40,5 +40,8 @@ $(function () {
             $('#sc-row').html(contHtml);
         }
     })
-
 })
+
+function enterShopList(parentId) {
+    window.location.href = '/index/shopList?parentId='+parentId;
+}

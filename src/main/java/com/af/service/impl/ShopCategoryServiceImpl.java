@@ -4,6 +4,7 @@ import com.af.mapper.ShopCategoryMapper;
 import com.af.model.dto.ShopCategoryVo;
 import com.af.model.pojo.ShopCategory;
 import com.af.service.ShopCategoryService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -35,5 +36,21 @@ public class ShopCategoryServiceImpl implements ShopCategoryService {
        }
         return shopCategoryMapper.selectByExample(shopCategoryExample);
 
+    }
+
+    @Override
+    public List<ShopCategory> getByParentId(Integer parentId) {
+        if(parentId == 0){
+            //查询所有
+            List<ShopCategory> shopCategories = shopCategoryMapper.selectAll();
+            return shopCategories;
+        }else{
+            //传入的是一级分类的id
+            Example example = new Example(ShopCategory.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("parentId",parentId);
+            List<ShopCategory> shopCategories = shopCategoryMapper.selectByExample(example);
+            return shopCategories;
+        }
     }
 }

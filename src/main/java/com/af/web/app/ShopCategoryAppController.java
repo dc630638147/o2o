@@ -4,12 +4,10 @@ import com.af.model.dto.ShopCategoryVo;
 import com.af.model.pojo.ShopCategory;
 import com.af.service.ShopCategoryService;
 import com.af.utils.JSONResult;
+import net.sf.json.JSON;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,6 +44,16 @@ public class ShopCategoryAppController {
         vo.setParentId(0);
         List<ShopCategory> allCategory = shopCategoryService.getAllCategory(vo);
         return JSONResult.ok(allCategory);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping("/getByParentId")
+    public JSONResult getByParentId(@RequestParam("parentId") Integer parentId){
+        List<ShopCategory> list = shopCategoryService.getByParentId(parentId);
+        return JSONResult.ok(list);
     }
 
 }

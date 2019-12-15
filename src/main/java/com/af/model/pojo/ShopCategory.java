@@ -38,5 +38,4 @@ public class ShopCategory {
     //上级店铺类别
     @Column(name = "parent_id")
     private Integer parentId;
-
 }

@@ -14,4 +14,6 @@ public interface ShopCategoryService {
 
     public List<ShopCategory> getAllCategory(ShopCategoryVo vo);
 
+    public List<ShopCategory> getByParentId(Integer parentId);
+
 }

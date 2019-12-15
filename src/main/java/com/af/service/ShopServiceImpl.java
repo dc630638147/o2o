@@ -157,7 +157,9 @@ public class ShopServiceImpl implements ShopService {
             criteria.andEqualTo("enableStatus",shopVo.getEnableStatus());
         }
         //商家id
-        criteria.andEqualTo("ownerId",shopVo.getOwnerId());
+        if(shopVo.getOwnerId() != null){
+            criteria.andEqualTo("ownerId",shopVo.getOwnerId());
+        }
         PageHelper.startPage(shopVo.getPageNum(),shopVo.getPageSize());
         List<Shop> shops = shopMapper.selectByExample(shopExample);
         PageInfo<Shop> pageInfo = new PageInfo<>(shops);
